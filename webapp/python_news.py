@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
+from webapp.model import db, News
 
 def get_html(url):
     try:
@@ -20,6 +22,20 @@ def get_python_news():
             title = news.find('a').text
             url_title = news.find('a')['href']
             published = news.find('time').text
-            result_news.append({'title': title, 'url_title': url_title, 'published': published})
-        return result_news
-    return False
+            print(published)
+            try:
+                published = datetime.strptime(published, '%B %d, %Y')
+                print(f'gthdfz {published}')
+            except(ValueError):
+                published = datetime.now()
+                print(f'secondtime {published}')
+            save_news(title, url_title, published)
+
+
+def save_news(title, url, published):
+    news_exists = News.query.filter(News.url == url).count()
+    print(news_exists)
+    if not news_exists:
+        new_news = News(title=title, url=url, published=published)
+        db.session.add(new_news)
+        db.session.commit()
