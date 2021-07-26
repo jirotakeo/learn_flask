@@ -21,24 +21,28 @@
             </div>
         {% endif %}
       {% endwith %}
+      <div>
+          <h1>{{ page_title }}</h1>
+      </div>
       <div class="row">
-          <div class="col-8">
-              <h1>Новости</h1>
-              {% for news in news_list %}
-                <h3><a href="{{ news.url_title }}">{{ news.title }}</a></h3>
-                <p>{{ news.published.strftime('%d.%m.%Y') }}</p>
-              {% endfor %}
+          <div class="col-6">
+              <form action="{{ url_for('process_login') }}" method="post">
+                  {{ form.hidden_tag() }}
+                  <br>
+                  <div class="form-group">
+                      {{ form.username.label }}
+                      {{ form.username() }}
+                  </div><br>
+                  <div class="form-group">
+                      {{ form.password.label }}
+                      {{ form.password() }}
+                  </div>
+                  <br>
+                  {{ form.submit }}
+              </form>
           </div>
-          <div class="col-4">
-              <h2>Погода</h2>
-              <p>
-                {% if weather_text %}
-                    Температура: {{ weather_text.temp_C }}℃, Ощущается как: {{ weather_text.FeelsLikeC }}℃
-                        ({{ weather_text.lang_ru[0].value }})
-                {% else %}
-                    Сервис не доступен
-                {% endif %}
-              </p>
+          <div class="col-6">
+
           </div>
       </div>
   </div>
