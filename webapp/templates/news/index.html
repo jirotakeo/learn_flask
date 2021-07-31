@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+      <div class="row">
+          <div class="col-8">
+              <h1>Новости</h1>
+              {% for news in news_list %}
+                <h3><a href="{{ news.url_title }}">{{ news.title }}</a></h3>
+                <p>{{ news.published.strftime('%d.%m.%Y') }}</p>
+              {% endfor %}
+          </div>
+          <div class="col-4">
+              <h2>Погода</h2>
+              <p>
+                {% if weather_text %}
+                    Температура: {{ weather_text.temp_C }}℃, Ощущается как: {{ weather_text.FeelsLikeC }}℃
+                        ({{ weather_text.lang_ru[0].value }})
+                {% else %}
+                    Сервис не доступен
+                {% endif %}
+              </p>
+          </div>
+      </div>
+{% endblock %}
