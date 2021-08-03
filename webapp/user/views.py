@@ -1,4 +1,7 @@
-from webapp.user.forms import LoginForm
+from crypt import methods
+
+from webapp.user.forms import LoginForm, RegistrationForm
+from webapp.db import db
 from flask import render_template, flash, redirect, url_for
 from webapp.user.models import User
 from flask_login import current_user, login_user, logout_user
@@ -33,5 +36,26 @@ def process_login():
 @blueprint.route('/logout')
 def logout():
     logout_user()
-    flash('вы вышли')
+    flash('Вы вышли')
     return redirect(url_for('news.index'))
+
+@blueprint.route('/register')
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('news.index'))
+    page_title = 'Регистрация'
+    register_form = RegistrationForm()
+    return render_template('user/registration.html', page_title=page_title, form=register_form)
+
+@blueprint.route('/process-reg', methods=['POST'])
+def process_reg():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        new_user = User(username=form.username.data, email=form.email.data, role='user')
+        new_user.set_password(form.password.data)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Вы успешно зарегистрировались!')
+        return redirect(url_for('user.login'))
+    flash('Исправьте ошибки в форме')
+    return redirect(url_for('user.register'))
