@@ -25,11 +25,11 @@
           </li>
           {% endif %}
           <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('user.logout') }}">Выйти</a>
+              <a class="nav-link" href="{{ url_for('user.logout', next=request.full_path) }}">Выйти</a>
           </li>
             {% else %}
           <li>
-              <a class="nav-link" href="{{ url_for('user.login') }}">Войти</a>
+              <a class="nav-link" href="{{ url_for('user.login', next=request.full_path) }}">Войти</a>
           </li>
           <li class="nav-item">
               <a class="nav-link" href="{{ url_for('user.register') }}">Регистрация</a>
